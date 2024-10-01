@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rich Client!</title>
+
+</head>
+<body>
+
+<h1>"Rich" Client for <i>Simple HTTP Server</i></h1>
+<h2>View the "Hello" Message</h2>
+<p><button id="btn-hello">See contents of <kbd>/helloJSON</kbd></button></p>
+<div id="output-hello">???</div>
+
+<hr>
+
+<h2>View the "Current Time" Message</h2>
+<p><button id ="btn-time">See contents of <kbd>/timeJSON</kbd></button></p>
+<div id ="output-time">???</div>
+
+<hr>
+
+
+<h2>A Dank Meme ...</h2>
+
+<img src="spongegar.png" width="200" />
+ <hr>
+
+ <h2>Show A Random Quote!</h2>
+<p><button id ="btn-random">See contents of <kbd>/quotes/random</kbd></button></p>
+<div id ="output-random">???</div>
+
+<hr>
+
+<h2>Show the Recent Quote! </h2>
+<p><button id ="btn-recent">See contents of <kbd>/quotes/recent</kbd></button></p>
+<div id ="output-recent">???</div>
+  
+</body>
+<script>
+const getJsonFetch = async (url, callback) => {
+  let json;
+  try{
+    const response = await fetch(url,{
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+    json = await response.json();
+  }
+  catch(error){
+    console.log("ERROR:", error);
+    json = {author: `Can't parse data file '${url}'`};
+  }
+  callback(json);
+};
+
+const btnHello = document.querySelector("#btn-hello");
+const outputHello = document.querySelector("#output-hello");
+
+const btnTime = document.querySelector("#btn-time");
+const outputTime = document.querySelector("#output-time");
+
+const btnRandom = document.querySelector("#btn-random");
+const outputQuote = document.querySelector("#output-random");
+
+const btnRecent = document.querySelector("#btn-recent");
+const outputRecent = document.querySelector("#output-recent");
+
+
+
+ const helloJSONURL = "/api/helloJSON";
+const helloCallback = json => {
+  outputHello.innerHTML = json.message || "No <kbd>.message</kbd> value found!";
+};
+
+const timeJSONURL = "/api/timeJSON";
+const timeCallback = json => {
+    outputTime.innerHTML = json.time || "No <kbd>.message</kbd> value found!"
+}
+
+const randomJSONURL = "/quotes/random";
+const randomCallback = json => {
+  outputQuote.innerHTML = `<i>${json.content}</i> - <b>${json.author}</b>` || "No <kbd>.message</kbd> value found!"
+}
+
+const recentJSONURL = "/quotes/recent";
+const recentCallback = json => {
+  outputRecent.innerHTML = `<i>${json.content}</i> - <b>${json.author}</b>` || "No <kbd>.message</kbd> value found!"
+}
+
+
+
+
+
+btnHello.onclick = () => getJsonFetch(helloJSONURL, helloCallback);
+btnTime.onclick = () => getJsonFetch(timeJSONURL, timeCallback)
+btnRandom.onclick = () => getJsonFetch(randomJSONURL, randomCallback)
+btnRecent.onclick = () => getJsonFetch(recentJSONURL, recentCallback)
+
+
+</script>
+</html>
