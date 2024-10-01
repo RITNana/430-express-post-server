@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 });
 
 // access a random quote
-// import our randomQuote function 
+// import our randomQuote function
 router.get('/random', (req, res) => {
   res.json(db.randomQuote());
 });
