@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// obtain the directory path our server will need 
-// parse and destructure our data 
+// obtain the directory path our server will need
+// parse and destructure our data
 const quotesPath = path.resolve(__dirname, 'data/quotes-data.json');
 const jsonString = fs.readFileSync(quotesPath);
 const data = JSON.parse(jsonString);
