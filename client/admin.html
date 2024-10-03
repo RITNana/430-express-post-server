@@ -74,54 +74,53 @@ const getJsonFetch = async (url, callback) => {
   }
   callback(json);
 };
-// payload, data that we want to send along with the POST request
-const postJsonFetch = async (url, payload, callback) => {
-    let json;
-    let status;
-    try{
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 
-                'content-type': 'application/json'
-            }, 
-            body: JSON.stringify(payload),
-        });
-        json = await response.json();
-        status = `status: ${response.status} : ${response.statusText}`;
-    }
-    catch(error){
-        console.log('ERROR: ', error);
-        json = {error: `Can't parse data file '${url}'`}
-    }
-    callback(json, status);
-}
 
-const addHootCallback = selector => {
-    const element = document.querySelector(selector);
-    return (json, status) => {
-        element.innerHTML = `
-        <div>
-            <p><b>id:</b> ${json.id}</p>
-            <p><b>content:</b> ${json.content}</p>
-            <p><b>createdAt:</b> ${json.createdAt}</p>
-        </div>
-        <p><b>${status}</b></p>
-         `;
-    };
+const postJsonFetch = async (url, payload, callback) => {
+  let json;
+  let status;
+  try{
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+    })
+    json = await response.json();
+    status = `status: ${response.status} : ${response.statusText}`;
+  }
+  catch(error){
+    console.log('Error: ', error);
+    json = {error: `Can't parse data file '${url}'`}
+  }
+  callback(json, status)
 };
 
-/* Add HOOT*/
+const addHootCallback = selector => {
+  const element = document.querySelector(selector);
+  return(json, status) => {
+    element.innerHTML = `
+    <div>
+      <p><b>id:</b> ${json.id}</p>
+      <p><b>content:</b> ${json.content}</p>
+      <p><b>createdAt:</b> ${json.createdAt}</p>
+    </div>
+    <p><b>${status}</b></p>
+    `;
+  };
+};
+
 const addHootForm = document.querySelector('#form-add-hoot');
 const newHootURL = '/api/addHoot';
-addHootForm.onsumbit = (evt) => {
-    evt.preventDefault();
-    const content = addHootForm['content'].value;
-    const payload = {
-        content,
-    };
-    addHootForm['content'].value = '';
-    postJsonFetch(newHootURL, payload, addHootCallback('#output-new-hoot'));
+addHootForm.onsubmit = (evt) => {
+  evt.preventDefault();
+  const content = addHootForm['content'].value;
+  const payload = {
+    content,
+  };
+  addHootForm['content'].value = '';
+  postJsonFetch(newHootURL, payload, addHootCallback('#output-new-hoot'))
 }
 
 /* GET All Hoots */
