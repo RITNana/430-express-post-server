@@ -23,4 +23,26 @@ router.get('/helloJSON', (req, res) => {
 router.get('/timeJSON', (req, res) => {
   res.status(200).json({ time: new Date().toString() });
 });
+
+router.post('/addHoot', (req, res) => {
+  // console.log('req.body.content=', req.body.content);
+  // verify that we got POST data
+  const content = req.body && req.body.content
+    ? req.body.content
+    : 'No req.body or req.body.content found!';
+
+    // create a 'hoot' object literal
+  const hoot = {
+    testId: generateNewId(),
+    content,
+    createdAt: new Date(),
+  };
+
+
+  // add hoot to array
+  hoots.push(hoot);
+
+  // send new hoot back to caller
+  res.status(201).json(hoot)
+})
 module.exports = router;

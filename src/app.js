@@ -15,6 +15,8 @@ const filePath404Page = path.resolve(__dirname, '../client/404.html');
 // put this AFTER we instantiate `app`, and BEFORE our GET and POST routes
 app.use(express.static('client'));
 
+app.use(express.json());
+
 // use routes (put this near the bottom, BEFORE app.listen()
 app.use('/', indexRouter);
 
