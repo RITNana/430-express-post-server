@@ -10,11 +10,14 @@ const hoots = [{
   createdAt: new Date(),
 }];
 
+// DELETE
+// returns hoot with a matching id, otherwise undefined
 const getHootById = (id) => {
   const hoot = hoots.find((h) => h.id === id);
   return hoot;
 };
 
+// reusable code
 const deleteHootById = (id) => {
   const hoot = getHootById(id);
   if (!hoot) return null;
@@ -23,14 +26,31 @@ const deleteHootById = (id) => {
   return hoot;
 };
 
-router.delete('/deleteHoot/:id([0-9,a-z,A-Z,-]{36}', () => {
-
+// only be called if 36 characters passed in
+// search if hoot is deleted
+// return hoot copy
+router.delete('/deleteHoot/:id([0-9,a-z,A-Z,-]{36})', (req, res) => {
+  const hoot = deleteHootById(req.params.id);
+  if (!hoot) {
+    const error = `id: '${req.params.id} not found'`;
+    res.status(404).send({ error });
+  } else {
+    res.json(hoot);
+  }
 });
-
-deleteHootById();
 
 router.get('/hoots', (req, res) => {
   res.json(hoots);
+});
+
+router.get('/hoots/:id([0-9,a-z,A-Z,-]{36})', (req, res) => {
+  const hoot = getHootById(req.params.id);
+  if (!hoot) {
+    const error = `id: '${req.params.id} not found'`;
+    res.status(404).send({ error });
+  } else {
+    res.json(hoot);
+  }
 });
 
 // send a request to get the data for our helloJSON request
@@ -52,7 +72,7 @@ router.post('/addHoot', (req, res) => {
 
   // create a 'hoot' object literal
   const hoot = {
-    testId: generateNewId(),
+    id: generateNewId(),
     content,
     createdAt: new Date(),
   };
@@ -62,6 +82,23 @@ router.post('/addHoot', (req, res) => {
 
   // send new hoot back to caller
   res.status(201).json(hoot);
+});
+
+// look for existing hoot, if there is none, send back 404 status errpr code
+// if we DO, update the content property by adding a .updatedAt property
+router.put('/updateHoot/:id([0-9,a-z,A-Z,-]{36})', (req, res) => {
+  const hoot = getHootById(req.params.id);
+  if (!hoot) {
+    const error = `id: '${req.params.id}' not found`;
+    res.status(404).send({ error });
+  } else {
+    const content = req.body && req.body.content
+      ? req.body.content
+      : 'No req.body or req.body.content found!';
+    hoot.content = content;
+    hoot.updatedAt = new Date();
+    res.json(hoot);
+  }
 });
 
 module.exports = router;
