@@ -4,11 +4,30 @@ const router = express.Router();
 
 const generateNewId = () => crypto.randomUUID();
 
+// const hoots = [{
+//   id: generateNewId(),
+//   content: "Let's Rock!",
+//   createdAt: new Date(),
+// }];
+
 const hoots = [{
-  id: generateNewId(),
+  id: '11111111-2222-3333-4444-55555555555555',
   content: "Let's Rock!",
   createdAt: new Date(),
-}];
+},
+
+];
+
+router.head('/hoots', (req, res) => {
+  console.log('HEAD called');
+  const { length } = JSON.stringify(hoots);
+  res.set({
+    'Content-Type': 'applications/json',
+    'Content-Length': length,
+    'X-Coder': 'NKS',
+  });
+  res.end();
+});
 
 // DELETE
 // returns hoot with a matching id, otherwise undefined
