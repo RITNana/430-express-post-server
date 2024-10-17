@@ -17,6 +17,8 @@ app.use(express.static('client'));
 
 app.use(express.json());
 
+app.use(express.urlencoded({ entended: true }));
+
 // use routes (put this near the bottom, BEFORE app.listen()
 app.use('/', indexRouter);
 

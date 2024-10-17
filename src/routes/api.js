@@ -11,11 +11,15 @@ const generateNewId = () => crypto.randomUUID();
 // }];
 
 const hoots = [{
-  id: '11111111-2222-3333-4444-55555555555555',
+  id: '11111111-2222-3333-4444-555555555555',
   content: "Let's Rock!",
   createdAt: new Date(),
 },
-
+{
+  id: '66666666-7777-8888-9999-000000000000',
+  content: "Bird's aren't real!",
+  createdAt: new Date(),
+},
 ];
 
 router.head('/hoots', (req, res) => {
@@ -59,6 +63,7 @@ router.delete('/deleteHoot/:id([0-9,a-z,A-Z,-]{36})', (req, res) => {
 });
 
 router.get('/hoots', (req, res) => {
+  console.log('GET called');
   res.json(hoots);
 });
 
